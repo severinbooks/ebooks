@@ -42,42 +42,52 @@
     </div>
     <div id="viewer"></div>
     <script>
-        // Google Drive URL
-        var googleDriveUrl = 'https://drive.google.com/uc?export=download&id=1uZbzEEm-oWjhjdHKBo6Ke-gnEz-B649n';
+        document.addEventListener("DOMContentLoaded", function() {
+            // Google Drive URL
+            var googleDriveUrl = 'https://drive.google.com/uc?export=download&id=1uZbzEEm-oWjhjdHKBo6Ke-gnEz-B649n';
 
-        // Initialize the book from Google Drive URL
-        var book = ePub(googleDriveUrl);
-        var rendition = book.renderTo("viewer", {
-            width: "100%",
-            height: "100%"
-        });
+            // Initialize the book from Google Drive URL
+            var book = ePub(googleDriveUrl);
+            var rendition = book.renderTo("viewer", {
+                width: "100%",
+                height: "100%"
+            });
 
-        rendition.display();
+            rendition.display().then(() => {
+                console.log("Book loaded successfully!");
+            }).catch((err) => {
+                console.error("Error loading book:", err);
+            });
 
-        document.getElementById('search').addEventListener('input', function (event) {
-            var query = event.target.value;
-            if (query) {
-                book.search(query).then(function (results) {
-                    // Display search results or navigate to them
-                    console.log(results);
-                    if (results.length > 0) {
-                        rendition.display(results[0].cfi);
-                    }
-                });
-            }
-        });
+            document.getElementById('search').addEventListener('input', function (event) {
+                var query = event.target.value;
+                if (query) {
+                    book.search(query).then(function (results) {
+                        // Display search results or navigate to them
+                        console.log(results);
+                        if (results.length > 0) {
+                            rendition.display(results[0].cfi);
+                        }
+                    }).catch((err) => {
+                        console.error("Search error:", err);
+                    });
+                }
+            });
 
-        document.getElementById('filter').addEventListener('change', function (event) {
-            var term = event.target.value;
-            if (term) {
-                book.search(term).then(function (results) {
-                    // Display search results or navigate to them
-                    console.log(results);
-                    if (results.length > 0) {
-                        rendition.display(results[0].cfi);
-                    }
-                });
-            }
+            document.getElementById('filter').addEventListener('change', function (event) {
+                var term = event.target.value;
+                if (term) {
+                    book.search(term).then(function (results) {
+                        // Display search results or navigate to them
+                        console.log(results);
+                        if (results.length > 0) {
+                            rendition.display(results[0].cfi);
+                        }
+                    }).catch((err) => {
+                        console.error("Filter error:", err);
+                    });
+                }
+            });
         });
     </script>
 </body>
