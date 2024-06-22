@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ePub Viewer with Search and Filter</title>
-    <script src="js/epub.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/epub.js/0.3.88/epub.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -43,7 +44,7 @@
     <div id="viewer"></div>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Direkter Download-Link von Google Drive
+            // Modifizierter direkter Download-Link von Google Drive
             var googleDriveDirectUrl = 'https://drive.google.com/uc?export=download&id=1uZbzEEm-oWjhjdHKBo6Ke-gnEz-B649n';
 
             // Initialize the book from Google Drive URL
