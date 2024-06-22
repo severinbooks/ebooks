@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ePub Viewer with Search and Filter</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/epub.js/0.3.88/epub.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #controls {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        #viewer {
+            width: 100%;
+            height: 80vh;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        #search, #filter {
+            margin-bottom: 10px;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <input type="text" id="search" placeholder="Search...">
+        <select id="filter">
+            <option value="">Select a term to filter</option>
+            <option value="term1">Term 1</option>
+            <option value="term2">Term 2</option>
+            <option value="term3">Term 3</option>
+            <!-- Add more terms as needed -->
+        </select>
+    </div>
+    <div id="viewer"></div>
+    <script>
+        // Google Drive URL
+        var googleDriveUrl = 'https://drive.google.com/uc?export=download&id=1uZbzEEm-oWjhjdHKBo6Ke-gnEz-B649n';
+
+        // Initialize the book from Google Drive URL
+        var book = ePub(googleDriveUrl);
+        var rendition = book.renderTo("viewer", {
+            width: "100%",
+            height: "100%"
+        });
+
+        rendition.display();
+
+        document.getElementById('search').addEventListener('input', function (event) {
+            var query = event.target.value;
+            if (query) {
+                book.search(query).then(function (results) {
+                    // Display search results or navigate to them
+                    console.log(results);
+                    if (results.length > 0) {
+                        rendition.display(results[0].cfi);
+                    }
+                });
+            }
+        });
+
+        document.getElementById('filter').addEventListener('change', function (event) {
+            var term = event.target.value;
+            if (term) {
+                book.search(term).then(function (results) {
+                    // Display search results or navigate to them
+                    console.log(results);
+                    if (results.length > 0) {
+                        rendition.display(results[0].cfi);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
