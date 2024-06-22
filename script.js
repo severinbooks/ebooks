@@ -1,36 +1,37 @@
-// Lade die Bücher aus der JSON-Datei
-fetch('bibliothek.json')
+// Hier wird angenommen, dass die JSON-Daten in einer Datei `bibliothek.json` gespeichert sind
+const jsonFile = 'bibliothek.json';
+
+fetch(jsonFile)
     .then(response => response.json())
-    .then(books => {
-        const bookList = document.getElementById('bookList');
+    .then(data => {
+        const coverList = document.querySelector('.cover-list');
+        const sidebar = document.querySelector('.book-details');
 
-        // Funktion zum Anzeigen der Bücher
-        function displayBooks(books) {
-            bookList.innerHTML = '';
-            books.forEach(book => {
-                const bookElement = document.createElement('div');
-                bookElement.classList.add('book');
-                bookElement.innerHTML = `
-                    <img src="${book.cover_image || 'placeholder.jpg'}" alt="${book.title} Cover">
-                    <h3>${book.title}</h3>
-                    <p>von ${book.author}</p>
-                    <p>Reihe: ${book.series || 'Nicht angegeben'}</p>
-                    <p>Verlag: ${book.publisher || 'Nicht angegeben'}</p>
-                    <p>Sprache: ${book.language || 'Nicht angegeben'}</p>
-                    <p>Tags: ${book.tags.join(', ')}</p>
+        // Durchlaufe alle Bücher in der JSON-Datei
+        data.forEach(book => {
+            // Erstelle ein Cover-Element für jedes Buch
+            const cover = document.createElement('img');
+            cover.src = `data:image/jpeg;base64,${book.cover_image}`;
+            cover.alt = book.title;
+            cover.classList.add('cover');
+
+            // Füge einen Event Listener hinzu, um Details beim Klicken anzuzeigen
+            cover.addEventListener('click', () => {
+                // Setze die Buchdetails in die Sidebar
+                sidebar.innerHTML = `
+                    <h2>${book.title}</h2>
+                    <p><strong>Autor:</strong> ${book.author}</p>
+                    <p><strong>Tags:</strong> ${book.tags.join(', ')}</p>
+                    <p><strong>Reihe:</strong> ${book.series || '-'}</p>
+                    <p><strong>Verlag:</strong> ${book.publisher || '-'}</p>
+                    <p><strong>Sprache:</strong> ${book.language || '-'}</p>
                 `;
-                bookList.appendChild(bookElement);
             });
-        }
 
-        displayBooks(books);
-
-        // Filterung bei Eingabe im Suchfeld
-        document.getElementById('searchInput').addEventListener('input', function() {
-            const searchText = this.value.toLowerCase();
-            const filteredBooks = books.filter(book =>
-                book.title.toLowerCase().includes(searchText)
-            );
-            displayBooks(filteredBooks);
+            // Füge das Cover zur Liste hinzu
+            coverList.appendChild(cover);
         });
+    })
+    .catch(error => {
+        console.error('Fehler beim Laden der JSON-Daten:', error);
     });
