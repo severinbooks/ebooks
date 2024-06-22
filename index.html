@@ -44,16 +44,15 @@
     <div id="viewer"></div>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Modifizierter direkter Download-Link von Google Drive
-            var googleDriveDirectUrl = 'https://drive.google.com/uc?export=download&id=1uZbzEEm-oWjhjdHKBo6Ke-gnEz-B649n';
+            var workerUrl = 'https://gdrivetogithub.severinroost.workers.dev/getEpub'; // URL Ihres Cloudflare Workers
 
-            // Initialize the book from Google Drive URL
+            // Initialize the book from Cloudflare Worker URL
             if (typeof ePub === 'undefined') {
                 console.error("ePub.js library not loaded");
                 return;
             }
 
-            var book = ePub(googleDriveDirectUrl);
+            var book = ePub(workerUrl);
             var rendition = book.renderTo("viewer", {
                 width: "100%",
                 height: "100%"
